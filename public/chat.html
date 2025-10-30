@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Chat — Private 1-to-1</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body class="dark">
+  <main class="center">
+    <div class="chat-card">
+      <header class="chat-header">
+        <div>
+          <strong id="roomLabel">Room:</strong>
+          <span id="roomName"></span>
+        </div>
+        <div>
+          <span id="youLabel"></span>
+          <button id="logoutBtn" class="tiny">Logout</button>
+        </div>
+      </header>
+
+      <div id="typingIndicator" class="small muted" style="padding:8px 16px; display:none;"></div>
+
+      <div id="messages" class="messages" aria-live="polite"></div>
+
+      <form id="msgForm" class="msg-form">
+        <input id="msgInput" autocomplete="off" placeholder="Type a message and press Enter" />
+      </form>
+    </div>
+  </main>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/client.js"></script>
+</body>
+</html>
