@@ -1,4 +1,6 @@
-
+input, select, textarea, button {
+  font-size: 16px;
+}
 /* Chat container */
 .chat-container {
     width: 50%;               /* Reduced width from 80% → 50% */
@@ -120,18 +122,24 @@
     align-self: flex-start;
     text-align: left;
   }
+
+  @media (max-width: 600px) {
+    .chat-card {
+      width: 95%;
+      height: 90vh;
+      margin: 10px auto;
+      border-radius: 12px;
+    }
   
-  .typing-indicator {
-    font-size: 14px;
-    color: #777;
-    padding: 6px 16px;
-    font-style: italic;
-    display: none;
-    animation: blink 1.2s infinite;
+    .msg-form input {
+      width: 100%;
+      font-size: 16px;
+      padding: 10px;
+    }
+  
+    .messages {
+      height: calc(90vh - 150px);
+      overflow-y: auto;
+    }
   }
   
-  /* Adds a gentle pulsing animation */
-  @keyframes blink {
-    0%, 100% { opacity: 0.4; }
-    50% { opacity: 1; }
-  }

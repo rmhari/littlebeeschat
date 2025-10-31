@@ -111,12 +111,22 @@ io.on('connection', (socket) => {
     socket.to(room).emit('stopTyping', { username });
   });
 
-  // read receipt: recipient tells server which message id was seen; server relays to room
   socket.on('messageSeen', ({ room, messageId, seenBy }) => {
-    if (!room || !messageId) return;
-    // broadcast to room (sender will update UI if they are in room)
-    io.in(room).emit('messageSeen', { messageId, seenBy, ts: Date.now() });
+    io.to(room).emit('messageSeen', { messageId, seenBy });
   });
+  // read receipt: recipient tells server which message id was seen; server relays to room
+  // socket.on('messageSeen', ({ room, messageId, seenBy }) => {
+  //   if (!room || !messageId) return;
+  //   // broadcast to room (sender will update UI if they are in room)
+  //   io.in(room).emit('messageSeen', { messageId, seenBy, ts: Date.now() });
+  // });
+
+  // read receipt: recipient tells server which message id was seen; server relays to sender
+socket.on('messageSeen', ({ room, messageId, seenBy }) => {
+  if (!room || !messageId) return;
+  // Notify only the other participant
+  socket.to(room).emit('messageSeen', { messageId, seenBy, ts: Date.now() });
+});
 
   socket.on('disconnecting', () => {
     const { room, username } = socket.data || {};

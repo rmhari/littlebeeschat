@@ -2,64 +2,82 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>Login — Private 1-to-1 Chat</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login BEE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
   <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body class="dark">
   <main class="center">
     <div class="card">
-      <h2>Join Private Chat</h2>
-      <p>Enter a display name and the shared password to join (both must use same room/password).</p>
-
-      <form id="loginForm">
+      <form id="loginForm" autocomplete="off">
         <label>
           Display name
-          <input name="username" required placeholder="Your name (e.g. Alex)">
+          <input 
+            name="username" 
+            required 
+            placeholder="Your name (e.g. Alex)" 
+            autocomplete="off"
+            autocapitalize="off"
+            spellcheck="false"
+          >
         </label>
+
         <label>
           Shared password
-          <input name="password" type="password" required placeholder="Shared secret">
+          <input 
+            name="password" 
+            type="password" 
+            required 
+            placeholder="Shared secret" 
+            autocomplete="new-password"
+          >
         </label>
+
         <label>
           Room
-          <input name="room" placeholder="room123 (optional)">
+          <input 
+            name="room" 
+            placeholder="room ?" 
+            autocomplete="off"
+            autocapitalize="off"
+            spellcheck="false"
+          >
         </label>
 
         <button type="submit">Join chat</button>
       </form>
 
-
       <div id="err" class="error"></div>
     </div>
   </main>
 
-<script>
-document.getElementById('loginForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const f = e.target;
-  const data = {
-    username: f.username.value.trim(),
-    password: f.password.value,
-    room: f.room.value.trim()
-  };
-  document.getElementById('err').textContent = '';
-  try {
-    const res = await fetch('/login', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(data)
-    });
-    const json = await res.json();
-    if (json.ok) {
-      location.href = '/chat';
-    } else {
-      document.getElementById('err').textContent = json.message || 'Login failed';
+  <script>
+  document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const f = e.target;
+    const data = {
+      username: f.username.value.trim(),
+      password: f.password.value,
+      room: f.room.value.trim()
+    };
+    document.getElementById('err').textContent = '';
+    try {
+      const res = await fetch('/login', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+      });
+      const json = await res.json();
+      if (json.ok) {
+        location.href = '/chat';
+      } else {
+        document.getElementById('err').textContent = json.message || 'Login failed';
+      }
+    } catch (err) {
+      document.getElementById('err').textContent = 'Network error';
     }
-  } catch (err) {
-    document.getElementById('err').textContent = 'Network error';
-  }
-});
-</script>
+  });
+  </script>
 </body>
 </html>

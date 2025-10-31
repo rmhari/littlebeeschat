@@ -44,7 +44,6 @@
 
         const meta = document.createElement('div');
         meta.className = 'meta';
-
         meta.innerHTML =
             from === username
                 ? `<span class="sender you">You</span>`
@@ -53,10 +52,10 @@
         const body = document.createElement('div');
         body.className = 'text';
         body.textContent = text;
-
         wrapper.appendChild(meta);
         wrapper.appendChild(body);
 
+        // tick only for own messages
         if (from === username) {
             const tick = document.createElement('span');
             tick.className = 'tick single';
@@ -68,11 +67,9 @@
         messagesEl.appendChild(wrapper);
         messagesEl.scrollTop = messagesEl.scrollHeight;
 
-        // Mark seen
+        // emit seen event if message from other user
         if (from !== username && id) {
-            setTimeout(() => {
-                socket.emit('messageSeen', { room, messageId: id, seenBy: username });
-            }, 400);
+            socket.emit('messageSeen', { room, messageId: id, seenBy: username });
         }
     }
 
@@ -95,7 +92,7 @@
     });
 
     socket.on('message', (m) => {
-        if (m.username !== username) appendMessage(m);
+        appendMessage(m);
     });
 
     socket.on('messageSeen', ({ messageId, seenBy }) => {
@@ -135,7 +132,7 @@
 
     // ===== Typing Logic =====
     let typingTimer = null;
-    const TYPING_TIMEOUT = 2000; // smoother visibility
+    const TYPING_TIMEOUT = 2000;
 
     function startTyping() {
         socket.emit('typing', { room, username });
@@ -173,7 +170,7 @@
         window.location = '/login.html';
     });
 
-    // ===== Seen Recheck =====
+    // ===== When window refocuses, mark all messages seen =====
     document.addEventListener('visibilitychange', () => {
         if (document.visibilityState === 'visible') {
             const otherMsgs = messagesEl.querySelectorAll('.msg.other');
